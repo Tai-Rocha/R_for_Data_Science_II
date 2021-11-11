@@ -1,6 +1,6 @@
-######################################
+#######################################
 ## Create a project from use_this pckg
-######################################
+#######################################
 
 ### Run this command in None project. After run this command the R opens new section (the project)
 

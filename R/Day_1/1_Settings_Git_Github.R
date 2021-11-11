@@ -1,6 +1,6 @@
-######################################
+####################################
 ## Settings for Git and Github
-######################################
+####################################
 
 # Settings for Git and Github (Certify that you run the next commands inside the project created)
 
