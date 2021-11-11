@@ -21,12 +21,12 @@ git_branch_default()
 # One time per project
 use_git()
 
-# Uma vez na vida
+# One time
 create_github_token()
 
-# Uma vez na vida
+# One time (Put the token)
 gitcreds::gitcreds_set()
 
-# Uma ver por projeto
+# One time per project
 use_github()
-```
+
