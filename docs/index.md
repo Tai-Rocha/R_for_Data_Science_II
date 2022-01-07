@@ -1,3 +1,12 @@
+---
+title: "Internet Film Database report - Relatório do Banco de Dados de Filmes da Internet"
+description: |
+  This is the final report of the Data Science R  II course presented to curso-r to obtain the certification. Este é o relatório final do   cursor R para Ciência de Dados II apresntado para curso-r para obtenção do certificado.
+author: Tainá Carreira da Rocha
+date: 2021-12-27
+output: rmarkdown::html_document
+---
+
 This is the final report of the Data Science R  II course presented to curso-r to obtain the certification. The course was promoted by [curso-r](https://curso-r.com/), a Brazilian company specialized in teaching Data Science using the R language.  The [course](https://curso-r.github.io/202111-r4ds-2/) happened in November 2021 and was ministered by Caio Castro and Amanda Amorim |<br/>
 <div style="text-align: justify"> Este é o relatório final do   cursor R para Ciência de Dados II apresentado para curso-r para obtenção do certificado.O curso foi promovido pela curso-r, empresa brasileira especializada no ensino de Ciência de Dados na linguagem R. O curso aconteceu em Novembro de 2021 e foi ministrado por Caio Leite e Amanda Amorim. 
 
@@ -313,3 +322,5 @@ freq_graph
 ```
 
 ### References | Referências 
+
+
