@@ -158,7 +158,7 @@ gen_mean
 ```
 
 
-### 5. Given the films in the base `imdb_completa`, choose your favorite. So do the following items | Dentre os filmes na base `imdb_completa`, escolha o seu favorito. Então faça os itens a seguir:
+### 5. Given the films in the base `imdb_completa`, choose your favourite. So do the following items | Dentre os filmes na base `imdb_completa`, escolha o seu favorito. Então faça os itens a seguir:
 
 ####  a) Who directed the film? Make a record of that person to age (nowadays or date of death), where he was born, how many films he has directed, what is the average profit of the films he has directed (considering only dollar values) and other information that you find interesting (base `imdb_pessoas `) | Quem dirigiu o filme? Faça uma ficha dessa pessoa: idade (hoje em dia ou data de falecimento), onde nasceu, quantos filmes já dirigiu, qual o lucro médio dos filmes que dirigiu (considerando apenas valores em dólar) e outras informações que achar interessante (base `imdb_pessoas`).
 
