@@ -7,6 +7,6 @@
 
 ?stringi::`stringi-search-regex` 
 
-[Final Report Main](https://tainaweb-en.netlify.app/tutorials/)
+[Final Report Main](https://tainaweb-en.netlify.app/tutorials/). This a version of my blog :purple_heart:
 
-[Final Report_Minor](https://tai-rocha.github.io/R_for_Data_Science_II.github.io/)
+[Final Report_Lite](https://tai-rocha.github.io/R_for_Data_Science_II.github.io/) This a version of my course repo :blush:
