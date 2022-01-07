@@ -1,7 +1,7 @@
 # R_for_Data_Science_II | R para CIência de Dados II
 
 
-This is a repo of [R for Data Science II course](https://curso-r.github.io/202111-r4ds-2/). The course was promoted by [curso-r](https://curso-r.com/), a Brazilian company focused on teaching Data Science using the R language. The [course](https://curso-r.github.io/202111-r4ds-2/) happened in November 2021 and was taught by [Caio Lente](https://lente.dev/en/) and Nicole Luduvice.
+This is a repo of [R for Data Science II course](https://curso-r.github.io/202111-r4ds-2/). The course was promoted by [curso-r](https://curso-r.com/), a Brazilian company focused on teaching Data Science using the R language. The classes happened in November 2021 and was taught by [Caio Lente](https://lente.dev/en/) and Nicole Luduvice.
 
 
 Este é o repositório do curso [R para Ciência de Dados II](https://curso-r.github.io/202111-r4ds-2/). O curso foi promovido pela [curso-r](https://curso-r.com/) em Novembro de 2021, empresa brasileira especializada no ensino de Ciência de Dados na linguagem R. O curso aconteceu em Novembro de 2021 e foi ministrado por [Caio Lente](https://lente.dev/en/) and Amanda Amorim.
