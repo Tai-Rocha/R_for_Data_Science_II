@@ -6,3 +6,5 @@
 
 
 ?stringi::`stringi-search-regex` 
+
+[Final Report](https://tai-rocha.github.io/R_for_Data_Science_II.github.io/)
