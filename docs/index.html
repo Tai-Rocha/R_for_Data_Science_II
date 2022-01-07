@@ -181,31 +181,64 @@ This is the final report of the Data Science R II course presented to curso-r to
 </div>
 </div>
 <p>The report respond follow questions: | Este relatório responde as seguintes perguntas :</p>
-<p><code>{r, echo=FALSE} knitr::opts_chunk$set(error = TRUE)</code></p>
 <div id="load-libraries-and-datasets" class="section level3">
 <h3>Load Libraries and Datasets</h3>
-<p>```{r labraries and datasets , eval = TRUE} #Load the libraries. If it’s not installed use command <em>install.packages(“pckg name”)</em></p>
-<p>library(dplyr) library(forcats) library(lubridate) library(knitr) library(tibble) library(tidyverse) library(stringr)</p>
-</div>
-<div id="to-access-the-complete-imdb-dataset-and-other-datasets-to-response-de-questions-install-basescursor-package-of-curso-r." class="section level2">
-<h2>To access the complete IMDB dataset and other datasets to response de questions, install basesCursoR package of curso-r.</h2>
-<p>#remotes::install_github(“curso-r/basesCursoR”)</p>
-<p>imdb &lt;- basesCursoR::pegar_base(“imdb_completa”) #head(imdb)</p>
-</div>
-<div id="get-imdb-people-dataset" class="section level2">
-<h2>Get IMDB People dataset</h2>
-<p>imdb_pessoas &lt;- basesCursoR::pegar_base(“imdb_pessoas”) #head(imdb_pessoas)</p>
-</div>
-<div id="get-imdb-assessments" class="section level2">
-<h2>Get IMDB assessments</h2>
-<p>imdb_avaliacoes &lt;- basesCursoR::pegar_base(“imdb_avaliacoes”) #head(imdb_avaliacoes)</p>
-<pre><code>
-### 1. Which month of the year has the most Films? And what day of the year?| Qual o mês do ano com o maior número de filmes? E o dia do ano?
+<pre class="r"><code>#Load the libraries. If it&#39;s not installed use command _install.packages(&quot;pckg name&quot;)_ 
 
-#### Month | Mês
-```{r Month, eval=TRUE}
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(forcats)
+library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>library(knitr)
+library(tibble)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.1.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x lubridate::as.difftime() masks base::as.difftime()
+## x lubridate::date()        masks base::date()
+## x dplyr::filter()          masks stats::filter()
+## x lubridate::intersect()   masks base::intersect()
+## x dplyr::lag()             masks stats::lag()
+## x lubridate::setdiff()     masks base::setdiff()
+## x lubridate::union()       masks base::union()</code></pre>
+<pre class="r"><code>library(stringr)
 
-month_Films &lt;- imdb |&gt;  
+## To access the complete IMDB dataset and other datasets to response de questions, install basesCursoR package of curso-r. 
+#remotes::install_github(&quot;curso-r/basesCursoR&quot;)
+
+imdb &lt;- basesCursoR::pegar_base(&quot;imdb_completa&quot;)
+#head(imdb)
+
+##  Get IMDB People dataset
+
+imdb_pessoas &lt;- basesCursoR::pegar_base(&quot;imdb_pessoas&quot;)
+#head(imdb_pessoas)
+
+## Get IMDB assessments
+
+imdb_avaliacoes &lt;- basesCursoR::pegar_base(&quot;imdb_avaliacoes&quot;)
+#head(imdb_avaliacoes)</code></pre>
+</div>
+<div id="which-month-of-the-year-has-the-most-films-and-what-day-of-the-year-qual-o-mês-do-ano-com-o-maior-número-de-filmes-e-o-dia-do-ano" class="section level3">
+<h3>1. Which month of the year has the most Films? And what day of the year?| Qual o mês do ano com o maior número de filmes? E o dia do ano?</h3>
+<div id="month-mês" class="section level4">
+<h4>Month | Mês</h4>
+<pre class="r"><code>month_Films &lt;- imdb |&gt;  
   mutate(data_lancamento_2 = as.Date(ymd(data_lancamento))) |&gt; # Convert from character to calendar date
   mutate(month = month(data_lancamento_2)) |&gt; # Get/set months component of a date-time
   filter(across (c(ano, month), ~ !is.na(.))) |&gt;  # Remove NA in ano, month columns using forcats
@@ -215,47 +248,86 @@ month_Films &lt;- imdb |&gt;
   ungroup() |&gt; 
   nest_by(year_month, count_Films) |&gt; 
   arrange(desc(count_Films)) |&gt;
-  head(1)
-  month_Films  </code></pre>
+  head(1)</code></pre>
+<pre><code>## Warning: 4563 failed to parse.</code></pre>
+<pre class="r"><code>  month_Films  </code></pre>
+<pre><code>## # A tibble: 1 × 3
+## # Rowwise:  year_month, count_Films
+##   year_month count_Films                data
+##   &lt;chr&gt;            &lt;int&gt; &lt;list&lt;tibble[,23]&gt;&gt;
+## 1 2018/10            386          [386 × 23]</code></pre>
+</div>
 <div id="day-dia" class="section level4">
 <h4>Day | Dia</h4>
-<p>```{r Day, eval=TRUE} day_Films &lt;- imdb |&gt;<br />
-mutate(data_lancamento_2 = as.Date(ymd(data_lancamento))) |&gt;<br />
-mutate(month = month(data_lancamento_2)) |&gt;<br />
-mutate(day = day(data_lancamento_2)) |&gt;<br />
-filter(across(c(day, month, ano), ~ !is.na(.))) |&gt;<br />
-mutate(year_month_day = paste(ano, month, day, sep = “/”)) |&gt;<br />
-group_by(year_month_day) |&gt;<br />
-mutate(count_Films = n_distinct(titulo)) |&gt;<br />
-ungroup() |&gt; nest_by(year_month_day, count_Films) |&gt;<br />
-arrange(desc(count_Films)) |&gt;<br />
-head(1)</p>
-<p>day_Films</p>
-<pre><code>
-
-### 2. Which top 5 countries with most films in the dataset ?| Qual o top 5 países com mais filmes na base?
-
-```{r top 5, eval=TRUE}
-top_5 &lt;- imdb |&gt; 
+<pre class="r"><code>day_Films &lt;- imdb |&gt;  
+  mutate(data_lancamento_2 = as.Date(ymd(data_lancamento))) |&gt;   
+  mutate(month = month(data_lancamento_2)) |&gt;  
+  mutate(day = day(data_lancamento_2)) |&gt;  
+  filter(across(c(day, month, ano), ~ !is.na(.))) |&gt;  
+  mutate(year_month_day = paste(ano, month, day, sep = &quot;/&quot;)) |&gt;  
+  group_by(year_month_day) |&gt;  
+  mutate(count_Films = n_distinct(titulo)) |&gt;  
+  ungroup() |&gt; 
+  nest_by(year_month_day, count_Films) |&gt;  
+  arrange(desc(count_Films)) |&gt;  
+  head(1)</code></pre>
+<pre><code>## Warning: 4563 failed to parse.</code></pre>
+<pre class="r"><code>day_Films</code></pre>
+<pre><code>## # A tibble: 1 × 3
+## # Rowwise:  year_month_day, count_Films
+##   year_month_day count_Films                data
+##   &lt;chr&gt;                &lt;int&gt; &lt;list&lt;tibble[,24]&gt;&gt;
+## 1 2018/10/26              46           [46 × 24]</code></pre>
+</div>
+</div>
+<div id="which-top-5-countries-with-most-films-in-the-dataset-qual-o-top-5-países-com-mais-filmes-na-base" class="section level3">
+<h3>2. Which top 5 countries with most films in the dataset ?| Qual o top 5 países com mais filmes na base?</h3>
+<pre class="r"><code>top_5 &lt;- imdb |&gt; 
   filter(!is.na(pais))  |&gt; 
   group_by(pais) |&gt; 
   count(pais, sort = TRUE) |&gt; 
   head(5)
 
 top_5</code></pre>
+<pre><code>## # A tibble: 5 × 2
+## # Groups:   pais [5]
+##   pais       n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 USA    28511
+## 2 India   6065
+## 3 UK      4111
+## 4 Japan   3077
+## 5 France  3055</code></pre>
 </div>
 <div id="list-all-currency-in-orcamento-and-receita-columns-of-imdb_completa-dataset.-liste-todas-as-moedas-que-aparecem-nas-colunas-orcamento-e-receita-da-base-imdb_completa." class="section level3">
 <h3>3. List all currency in <code>orcamento</code> and <code>receita</code> columns of <code>imdb_completa</code> dataset.| Liste todas as moedas que aparecem nas colunas <code>orcamento</code> e <code>receita</code> da base <code>imdb_completa</code>.</h3>
-<p>```{r currency, eval=TRUE} currency &lt;- imdb |&gt; filter(across(c(orcamento, receita), ~!is.na(.))) |&gt; summarise(unique(across( .cols = c(orcamento, receita), .fns = ~ str_remove((.x), pattern = ‘[0-9]+’))))</p>
-<p>currency</p>
-<pre><code>
-### 4. Given only which genre has the highest profit? And with a higher average grade? | Considerando apenas orçamentos e receitas em dólar ($), qual o gênero com maior lucro? E com maior nota média?
+<pre class="r"><code>currency &lt;- imdb |&gt; 
+  filter(across(c(orcamento, receita), ~!is.na(.)))  |&gt; 
+  summarise(unique(across(
+    .cols = c(orcamento, receita),
+    .fns = ~ str_remove((.x), pattern = &#39;[0-9]+&#39;)))) 
 
-#### Genre of Highest Profit | Maior Lucro por Gênero
-
-```{r Lucro Genres, eval=TRUE}
-
-gen_dolar &lt;- imdb |&gt; 
+currency</code></pre>
+<pre><code>## # A tibble: 62 × 2
+##    orcamento receita
+##    &lt;chr&gt;     &lt;chr&gt;  
+##  1 &quot;$ &quot;      &quot;$ &quot;   
+##  2 &quot;NOK &quot;    &quot;$ &quot;   
+##  3 &quot;GBP &quot;    &quot;$ &quot;   
+##  4 &quot;DEM &quot;    &quot;$ &quot;   
+##  5 &quot;FRF &quot;    &quot;$ &quot;   
+##  6 &quot;SEK &quot;    &quot;$ &quot;   
+##  7 &quot;ITL &quot;    &quot;$ &quot;   
+##  8 &quot;JPY &quot;    &quot;$ &quot;   
+##  9 &quot;RUR &quot;    &quot;$ &quot;   
+## 10 &quot;AUD &quot;    &quot;$ &quot;   
+## # … with 52 more rows</code></pre>
+</div>
+<div id="given-only-which-genre-has-the-highest-profit-and-with-a-higher-average-grade-considerando-apenas-orçamentos-e-receitas-em-dólar-qual-o-gênero-com-maior-lucro-e-com-maior-nota-média" class="section level3">
+<h3>4. Given only which genre has the highest profit? And with a higher average grade? | Considerando apenas orçamentos e receitas em dólar ($), qual o gênero com maior lucro? E com maior nota média?</h3>
+<div id="genre-of-highest-profit-maior-lucro-por-gênero" class="section level4">
+<h4>Genre of Highest Profit | Maior Lucro por Gênero</h4>
+<pre class="r"><code>gen_dolar &lt;- imdb |&gt; 
 filter(across(c(orcamento, receita), ~!is.na(.)))  |&gt;
  mutate(across(starts_with(c(&quot;orcamento&quot;, &quot;receita&quot;)), ~gsub(&quot;\\$&quot;, &quot;&quot;, .))) |&gt; 
  mutate(across(.cols = c(orcamento, receita), .fns = ~ as.numeric(.x))) |&gt; 
@@ -265,69 +337,100 @@ filter(across(c(orcamento, receita), ~!is.na(.)))  |&gt;
  unnest(genero) |&gt; 
  nest_by(genero, profit) |&gt; 
  arrange(desc(profit)) |&gt; 
- head(1)
-  
-gen_dolar</code></pre>
+ head(1)</code></pre>
+<pre><code>## Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</code></pre>
+<pre class="r"><code>gen_dolar</code></pre>
+<pre><code>## # A tibble: 1 × 3
+## # Rowwise:  genero, profit
+##   genero     profit                data
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;list&lt;tibble[,20]&gt;&gt;
+## 1 Action 2553439092            [1 × 20]</code></pre>
+</div>
 <div id="grade-mean-nota-média" class="section level4">
 <h4>Grade mean | Nota média</h4>
-<p>```{r Mean Genres, eval=TRUE}</p>
-<p>gen_mean &lt;- imdb |&gt;<br />
-left_join(imdb_avaliacoes, by = “id_filme”, copy = TRUE) |&gt; filter(across(c(genero, nota_media), ~!is.na(.))) |&gt;<br />
-mutate(genero = str_split(genero, “,”)) |&gt;<br />
-unnest(genero) |&gt;<br />
-nest_by(genero, nota_media) |&gt;<br />
-arrange(desc(nota_media)) |&gt;<br />
-head(1)</p>
-<p>gen_mean</p>
-<pre><code>
+<pre class="r"><code>gen_mean &lt;- imdb |&gt;  
+  left_join(imdb_avaliacoes, by = &quot;id_filme&quot;, copy = TRUE) |&gt; 
+  filter(across(c(genero, nota_media), ~!is.na(.))) |&gt;  
+  mutate(genero = str_split(genero, &quot;, &quot;)) |&gt;  
+  unnest(genero) |&gt;  
+  nest_by(genero, nota_media) |&gt;  
+  arrange(desc(nota_media)) |&gt;  
+  head(1) 
 
-### 5. Given the films in the base `imdb_completa`, choose your favorite. So do the following items | Dentre os filmes na base `imdb_completa`, escolha o seu favorito. Então faça os itens a seguir:
-
-####  a) Who directed the film? Make a record of that person to age (nowadays or date of death), where he was born, how many films he has directed, what is the average profit of the films he has directed (considering only dollar values) and other information that you find interesting (base `imdb_pessoas `) | Quem dirigiu o filme? Faça uma ficha dessa pessoa: idade (hoje em dia ou data de falecimento), onde nasceu, quantos filmes já dirigiu, qual o lucro médio dos filmes que dirigiu (considerando apenas valores em dólar) e outras informações que achar interessante (base `imdb_pessoas`).
-
-####  Direction | Direção
-
-```{r Name, eval=TRUE}
-
-esdto_director &lt;- imdb |&gt;  
+gen_mean</code></pre>
+<pre><code>## # A tibble: 1 × 3
+## # Rowwise:  genero, nota_media
+##   genero nota_media                data
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;list&lt;tibble[,37]&gt;&gt;
+## 1 Crime         9.8            [1 × 37]</code></pre>
+</div>
+</div>
+<div id="given-the-films-in-the-base-imdb_completa-choose-your-favorite.-so-do-the-following-items-dentre-os-filmes-na-base-imdb_completa-escolha-o-seu-favorito.-então-faça-os-itens-a-seguir" class="section level3">
+<h3>5. Given the films in the base <code>imdb_completa</code>, choose your favorite. So do the following items | Dentre os filmes na base <code>imdb_completa</code>, escolha o seu favorito. Então faça os itens a seguir:</h3>
+<div id="a-who-directed-the-film-make-a-record-of-that-person-to-age-nowadays-or-date-of-death-where-he-was-born-how-many-films-he-has-directed-what-is-the-average-profit-of-the-films-he-has-directed-considering-only-dollar-values-and-other-information-that-you-find-interesting-base-imdb_pessoas-quem-dirigiu-o-filme-faça-uma-ficha-dessa-pessoa-idade-hoje-em-dia-ou-data-de-falecimento-onde-nasceu-quantos-filmes-já-dirigiu-qual-o-lucro-médio-dos-filmes-que-dirigiu-considerando-apenas-valores-em-dólar-e-outras-informações-que-achar-interessante-base-imdb_pessoas." class="section level4">
+<h4>a) Who directed the film? Make a record of that person to age (nowadays or date of death), where he was born, how many films he has directed, what is the average profit of the films he has directed (considering only dollar values) and other information that you find interesting (base <code>imdb_pessoas</code>) | Quem dirigiu o filme? Faça uma ficha dessa pessoa: idade (hoje em dia ou data de falecimento), onde nasceu, quantos filmes já dirigiu, qual o lucro médio dos filmes que dirigiu (considerando apenas valores em dólar) e outras informações que achar interessante (base <code>imdb_pessoas</code>).</h4>
+</div>
+<div id="direction-direção" class="section level4">
+<h4>Direction | Direção</h4>
+<pre class="r"><code>esdto_director &lt;- imdb |&gt;  
   filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;)) |&gt;  
   select(&quot;Diretor Name&#39;s&quot;= direcao)
 
 esdto_director</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `Diretor Name&#39;s`    
+##   &lt;chr&gt;               
+## 1 Juan José Campanella</code></pre>
 </div>
 <div id="general-info-infos-gerais" class="section level4">
 <h4>General Info | Infos Gerais</h4>
-<p>```{r infos, eval=TRUE}</p>
-<p>general_info &lt;- imdb_pessoas |&gt; filter(str_detect(nome, pattern = “Juan José Campanella”)) |&gt; #filter(str_detect(titulo, pattern = “tt1305806$”, negate = TRUE)) %&gt;% #summarise(n_filmes = n_distinct(titulo)) mutate(across(.cols = data_nascimento, .fns = ~ as.Date(ymd(.)))) |&gt; mutate(idade = Sys.Date() - data_nascimento) |&gt; mutate(across(.cols = idade, .fns = ~ as.numeric(.x))) |&gt; mutate(idade = idade/365) |&gt; select(idade, local_nascimento, local_falecimento, data_nascimento, data_falecimento)</p>
-<p>general_info</p>
-<pre><code>
-#### Counting directed films | Número de Filmes dirigidos 
-
-
-```{r n_filmes, eval=TRUE}
-
-juan_all_Films  &lt;- imdb |&gt; 
+<pre class="r"><code>general_info &lt;- imdb_pessoas |&gt; 
+ filter(str_detect(nome, pattern = &quot;Juan José Campanella&quot;)) |&gt; 
+  #filter(str_detect(titulo, pattern = &quot;tt1305806$&quot;, negate = TRUE)) %&gt;% 
+  #summarise(n_filmes = n_distinct(titulo))
+  mutate(across(.cols = data_nascimento, .fns = ~ as.Date(ymd(.)))) |&gt; 
+  mutate(idade = Sys.Date() - data_nascimento) |&gt; 
+  mutate(across(.cols = idade, .fns = ~ as.numeric(.x))) |&gt; 
+  mutate(idade = idade/365) |&gt; 
+  select(idade, local_nascimento, local_falecimento, data_nascimento, data_falecimento)
+  
+general_info</code></pre>
+<pre><code>## # A tibble: 1 × 5
+##   idade local_nascimento       local_falecimen… data_nascimento data_falecimento
+##   &lt;dbl&gt; &lt;chr&gt;                  &lt;chr&gt;            &lt;date&gt;          &lt;date&gt;          
+## 1  62.5 Buenos Aires, Argenti… &lt;NA&gt;             1959-07-19      NA</code></pre>
+</div>
+<div id="counting-directed-films-número-de-filmes-dirigidos" class="section level4">
+<h4>Counting directed films | Número de Filmes dirigidos</h4>
+<pre class="r"><code>juan_all_Films  &lt;- imdb |&gt; 
   filter(str_detect(direcao, pattern = &quot;Juan José Campanella&quot;)) |&gt; 
   nrow()
   
-juan_all_Films  
-  </code></pre>
+juan_all_Films  </code></pre>
+<pre><code>## [1] 8</code></pre>
 </div>
 <div id="average-earnings-from-directed-films-lucros-médios-dos-filmes-dirigidos" class="section level4">
 <h4>Average earnings from directed films | Lucros médios dos filmes dirigidos</h4>
-<p>```{r mean amount}</p>
-<p>mean_profit &lt;- imdb |&gt;<br />
-filter(str_detect(direcao, pattern = “Juan José Campanella”)) |&gt; filter(across (c(orcamento, receita), ~ !is.na(.))) |&gt; mutate(across(starts_with(c(“orcamento”, “receita”)), ~gsub(“\$”, &quot;&quot;, .))) |&gt; mutate(across(.cols = c(orcamento, receita), .fns = ~ as.numeric(.x))) |&gt; mutate(profit = receita - orcamento) |&gt; summarise(mean_profit_ = mean(profit))</p>
-<p>mean_profit</p>
-<pre><code>
-
-#### b) What is the position of this film in the ranking of IMDB grades? And in the profit ranking (considering dollar values only)? | Qual a posição desse filme no ranking de notas do IMDB? E no ranking de lucro (considerando apenas valores em dólar)?
-
-#### Grade Ranking 
-
-```{r grade ranking}
-
-ranking_grade &lt;- imdb |&gt;  
+<pre class="r"><code>mean_profit &lt;- imdb |&gt;  
+     filter(str_detect(direcao, pattern = &quot;Juan José Campanella&quot;)) |&gt; 
+     filter(across (c(orcamento, receita), ~ !is.na(.))) |&gt; 
+     mutate(across(starts_with(c(&quot;orcamento&quot;, &quot;receita&quot;)), ~gsub(&quot;\\$&quot;, &quot;&quot;, .))) |&gt; 
+     mutate(across(.cols = c(orcamento, receita), .fns = ~ as.numeric(.x))) |&gt; 
+     mutate(profit = receita - orcamento) |&gt; 
+     summarise(mean_profit_ = mean(profit))
+  
+  mean_profit</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   mean_profit_
+##          &lt;dbl&gt;
+## 1    25699268.</code></pre>
+</div>
+<div id="b-what-is-the-position-of-this-film-in-the-ranking-of-imdb-grades-and-in-the-profit-ranking-considering-dollar-values-only-qual-a-posição-desse-filme-no-ranking-de-notas-do-imdb-e-no-ranking-de-lucro-considerando-apenas-valores-em-dólar" class="section level4">
+<h4>b) What is the position of this film in the ranking of IMDB grades? And in the profit ranking (considering dollar values only)? | Qual a posição desse filme no ranking de notas do IMDB? E no ranking de lucro (considerando apenas valores em dólar)?</h4>
+</div>
+<div id="grade-ranking" class="section level4">
+<h4>Grade Ranking</h4>
+<pre class="r"><code>ranking_grade &lt;- imdb |&gt;  
   left_join(imdb_avaliacoes, by = &quot;id_filme&quot;, copy = TRUE) |&gt;
   group_by(nota_media) |&gt; 
   arrange((desc(nota_media))) |&gt; 
@@ -335,39 +438,71 @@ ranking_grade &lt;- imdb |&gt;
   filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;))
  
 ranking_grade</code></pre>
+<pre><code>## # A tibble: 1 × 40
+## # Groups:   nota_media [1]
+##   Ranking_number id_filme  titulo  titulo_original    ano data_lancamento genero
+##            &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt; 
+## 1           1867 tt1305806 Il seg… El secreto de s…  2009 2010-06-04      Drama…
+## # … with 33 more variables: duracao &lt;dbl&gt;, pais &lt;chr&gt;, idioma &lt;chr&gt;,
+## #   orcamento &lt;chr&gt;, receita &lt;chr&gt;, receita_eua &lt;chr&gt;, nota_imdb &lt;dbl&gt;,
+## #   num_avaliacoes.x &lt;dbl&gt;, direcao &lt;chr&gt;, roteiro &lt;chr&gt;, producao &lt;chr&gt;,
+## #   elenco &lt;chr&gt;, descricao &lt;chr&gt;, num_criticas_publico &lt;dbl&gt;,
+## #   num_criticas_critica &lt;dbl&gt;, num_avaliacoes.y &lt;dbl&gt;, nota_media &lt;dbl&gt;,
+## #   nota_mediana &lt;dbl&gt;, nota_media_ponderada &lt;dbl&gt;,
+## #   nota_media_idade_0_18 &lt;dbl&gt;, num_votos_idade_0_18 &lt;dbl&gt;, …</code></pre>
 </div>
 <div id="profit-ranking-lucro-ranking" class="section level4">
 <h4>Profit Ranking | Lucro Ranking</h4>
-<p>```{r amount ranking}</p>
-<p>ranking_profit &lt;-imdb |&gt; filter(across(c(orcamento, receita), ~!is.na(.))) |&gt; mutate(across(starts_with(c(“orcamento”, “receita”)), ~gsub(“\<span class="math inline">\(&quot;, &quot;&quot;, .))) |&gt;  mutate(across(.cols = c(orcamento, receita), .fns = ~ as.numeric(.x))) |&gt;  mutate(profit = c(receita - orcamento)) |&gt;  filter(across(c(profit, genero), ~!is.na(.))) |&gt;  group_by(profit) |&gt;  arrange(desc(profit)) |&gt;  rowid_to_column(var = &quot;Ranking_Profit&quot;) |&gt;  filter(str_detect(id_filme, pattern = &quot;tt1305806\)</span>”))</p>
-<p>ranking_profit</p>
-<pre><code>
-
-#### c) What day was this film released? And the day of the week? Were any other films released on the same day? How old were you on that day? | Em que dia esse filme foi lançado? E dia da semana? Algum outro filme foi lançado no mesmo dia? Quantos anos você tinha nesse dia?
-
-#### Date Released
-
-```{r date released, eval=TRUE}
-
-date_released &lt;- imdb |&gt; 
+<pre class="r"><code>ranking_profit &lt;-imdb |&gt; 
+ filter(across(c(orcamento, receita), ~!is.na(.)))  |&gt;
+ mutate(across(starts_with(c(&quot;orcamento&quot;, &quot;receita&quot;)), ~gsub(&quot;\\$&quot;, &quot;&quot;, .))) |&gt; 
+ mutate(across(.cols = c(orcamento, receita), .fns = ~ as.numeric(.x))) |&gt; 
+ mutate(profit = c(receita - orcamento)) |&gt; 
+ filter(across(c(profit, genero), ~!is.na(.))) |&gt; 
+ group_by(profit) |&gt; 
+  arrange(desc(profit)) |&gt; 
+  rowid_to_column(var = &quot;Ranking_Profit&quot;) |&gt; 
+  filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;))</code></pre>
+<pre><code>## Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</code></pre>
+<pre class="r"><code>ranking_profit</code></pre>
+<pre><code>## # A tibble: 1 × 23
+## # Groups:   profit [1]
+##   Ranking_Profit id_filme  titulo  titulo_original    ano data_lancamento genero
+##            &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt; 
+## 1           2001 tt1305806 Il seg… El secreto de s…  2009 2010-06-04      Drama…
+## # … with 16 more variables: duracao &lt;dbl&gt;, pais &lt;chr&gt;, idioma &lt;chr&gt;,
+## #   orcamento &lt;dbl&gt;, receita &lt;dbl&gt;, receita_eua &lt;chr&gt;, nota_imdb &lt;dbl&gt;,
+## #   num_avaliacoes &lt;dbl&gt;, direcao &lt;chr&gt;, roteiro &lt;chr&gt;, producao &lt;chr&gt;,
+## #   elenco &lt;chr&gt;, descricao &lt;chr&gt;, num_criticas_publico &lt;dbl&gt;,
+## #   num_criticas_critica &lt;dbl&gt;, profit &lt;dbl&gt;</code></pre>
+</div>
+<div id="c-what-day-was-this-film-released-and-the-day-of-the-week-were-any-other-films-released-on-the-same-day-how-old-were-you-on-that-day-em-que-dia-esse-filme-foi-lançado-e-dia-da-semana-algum-outro-filme-foi-lançado-no-mesmo-dia-quantos-anos-você-tinha-nesse-dia" class="section level4">
+<h4>c) What day was this film released? And the day of the week? Were any other films released on the same day? How old were you on that day? | Em que dia esse filme foi lançado? E dia da semana? Algum outro filme foi lançado no mesmo dia? Quantos anos você tinha nesse dia?</h4>
+</div>
+<div id="date-released" class="section level4">
+<h4>Date Released</h4>
+<pre class="r"><code>date_released &lt;- imdb |&gt; 
    filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;)) |&gt;  
    summarise(date_released_ = as.Date(ymd(data_lancamento))) 
 
 date_released</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   date_released_
+##   &lt;date&gt;        
+## 1 2010-06-04</code></pre>
 </div>
 </div>
 <div id="counting-other-releases" class="section level3">
 <h3>Counting Other Releases</h3>
-<p>```{r n other releases, eval=TRUE}</p>
-<p>other_releases &lt;- imdb |&gt;<br />
-filter(str_detect(data_lancamento, pattern = “2010-06-04”)) |&gt; nrow() -1</p>
-<p>other_releases</p>
-<pre><code>
-#### My Age (Given I birth in 1988)
-
-```{r my age, eval=TRUE}
-
-my_age &lt;- imdb |&gt; 
+<pre class="r"><code>other_releases &lt;- imdb |&gt;  
+  filter(str_detect(data_lancamento, pattern = &quot;2010-06-04&quot;)) |&gt; 
+  nrow() -1
+  
+other_releases</code></pre>
+<pre><code>## [1] 18</code></pre>
+<div id="my-age-given-i-birth-in-1988" class="section level4">
+<h4>My Age (Given I birth in 1988)</h4>
+<pre class="r"><code>my_age &lt;- imdb |&gt; 
   filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;)) |&gt;
   mutate(year_release = as.Date(ymd(data_lancamento))) |&gt;
   mutate(year_release = str_split(2010, pattern = &quot;- &quot;)) |&gt;
@@ -378,17 +513,38 @@ my_age &lt;- imdb |&gt;
   relocate(my_age_, .before = titulo)
  
 my_age</code></pre>
+<pre><code>## # A tibble: 1 × 23
+## # Groups:   year_release [1]
+##   id_filme  my_age_ titulo  titulo_original   ano data_lancamento genero duracao
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt;
+## 1 tt1305806      22 Il seg… El secreto de …  2009 2010-06-04      Drama…     129
+## # … with 15 more variables: pais &lt;chr&gt;, idioma &lt;chr&gt;, orcamento &lt;chr&gt;,
+## #   receita &lt;chr&gt;, receita_eua &lt;chr&gt;, nota_imdb &lt;dbl&gt;, num_avaliacoes &lt;dbl&gt;,
+## #   direcao &lt;chr&gt;, roteiro &lt;chr&gt;, producao &lt;chr&gt;, elenco &lt;chr&gt;,
+## #   descricao &lt;chr&gt;, num_criticas_publico &lt;dbl&gt;, num_criticas_critica &lt;dbl&gt;,
+## #   year_release &lt;dbl&gt;</code></pre>
+</div>
 <div id="d-make-a-graph-representing-the-distribution-of-the-grade-attributed-to-this-film-by-age-base-imdb_avaliacoes.-faça-um-gráfico-representando-a-distribuição-da-nota-atribuída-a-esse-filme-por-idade-base-imdb_avaliacoes." class="section level4">
 <h4>d) Make a graph representing the distribution of the grade attributed to this film by age (base <code>imdb_avaliacoes</code>). | Faça um gráfico representando a distribuição da nota atribuída a esse filme por idade (base <code>imdb_avaliacoes</code>).</h4>
-<p>```{r, Graph, eval=TRUE}</p>
-<p>freq_graph &lt;- imdb_avaliacoes |&gt; filter(str_detect(id_filme, pattern = “tt1305806$”)) |&gt; dplyr::select(nota_media_idade_0_18, nota_media_idade_18_30, nota_media_idade_30_45, nota_media_idade_45_mais) |&gt; summarise(nota_media = as.numeric(c(nota_media_idade_0_18,nota_media_idade_18_30,nota_media_idade_30_45,nota_media_idade_45_mais))) |&gt;<br />
-rowid_to_column() |&gt; mutate(ages = c(“0-18”, “19-30”, “31-45”, “46+”)) |&gt; rename(mean_grade= nota_media ) |&gt; ggplot(aes(x = ages, y = mean_grade, fill = ages)) + geom_col(fill = c(“#440154FF”, “#31688EFF”, “#35B779FF”, “#FDE725FF”)) + geom_label(aes(label = mean_grade), show.legend = FALSE) + scale_fill_discrete()</p>
-<p>freq_graph ```</p>
+<pre class="r"><code>freq_graph &lt;- imdb_avaliacoes |&gt; 
+ filter(str_detect(id_filme, pattern = &quot;tt1305806$&quot;)) |&gt; 
+ dplyr::select(nota_media_idade_0_18, nota_media_idade_18_30, 
+         nota_media_idade_30_45, nota_media_idade_45_mais) |&gt; 
+  summarise(nota_media = as.numeric(c(nota_media_idade_0_18,nota_media_idade_18_30,nota_media_idade_30_45,nota_media_idade_45_mais))) |&gt;  
+ rowid_to_column() |&gt; 
+ mutate(ages = c(&quot;0-18&quot;, &quot;19-30&quot;, &quot;31-45&quot;, &quot;46+&quot;)) |&gt; 
+ rename(mean_grade= nota_media ) |&gt; 
+ ggplot(aes(x = ages, y = mean_grade, fill = ages)) +
+ geom_col(fill = c(&quot;#440154FF&quot;, &quot;#31688EFF&quot;, &quot;#35B779FF&quot;, &quot;#FDE725FF&quot;)) +
+ geom_label(aes(label = mean_grade), show.legend = FALSE) +
+ scale_fill_discrete()
+
+freq_graph</code></pre>
+<p><img src="data:image/png;base64,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BFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEiAnEwHqJR//vOfI0aMmDFjRn5+fufOnU877bRevXplOhQAAADsOjW9wG/YsOHmm29+6623IqJRo0br1q17//33P/jggx/84AdHHHFEptMBAADALlLTC/yjjz761ltvtW7d+qc//WnXrl0jYvjw4ffdd9/vf//7vfbaq2XLlpkOCAAAALtCjf4MfHFx8fPPP5+dnX3dddd169YtlUqlUqlBgwYNGDCguLh49OjRmQ4IAAAAu0iNPgP/2muvrV69+sADD2zTps2m4xdccMHgwYMbN26cqWAAAACwi9XoAv/OO+9ExIEHHrjZePPmzZs3b56JRAAAAJAZNbrAz5kzJyJatWo1Y8aMN954Y9KkSdnZ2V26dDnqqKM2Oye/0fr16xctWrTleEFBQXZ2dvXGBdLmOIVMcfRBplTj0VdaXQtDrZG4t78aXeBXrlwZERMnTnzssceKi4srBt9///3hw4dfdNFFhx9++JYvGT9+/AUXXLDl+CuvvNKkSZNqTQukr1mzZpmOAHWUow8ypfqOvrL51bQw1B6Je/ur0QW+orT/6U9/6tu373e+853OnTsvXbr0ueeee+GFF4YOHdq9e/fCwsJMZwQAAIBdoUYX+FQqFREdO3a87rrrKq5taNeu3YUXXrhmzZrXX3/9kUceufzyyzd7SdOmTQcOHLjlUmVlZRvP4QM1luMUMsXRB5lSfUdfbjWtC7VITXj7y8/Pr/zkGl3gCwoKVq9efdxxx232yYRjjjnm9ddfnzJlypYv6dy580033bTl+JIlS1atWlVdQYEq4jiFTHH0QaZU39Hnns+wXTXh7W+HCnyNfg5869atI2LL+9VVjC9atKi8vDwDsQAAAGCXq9EFvlu3bhExf/7m99+ouM/87rvvXnGNPQAAANR6NbrAH3vssRExYsSIsrKyTcdHjhwZEd27d89MLAAAANjlanSB79q1a+/evadNm3bLLbdUPFKupKRk2LBhr7zySn5+/umnn57pgAAAALCL1Oib2EXEpZdeesUVV4waNWr06NEtW7ZcunTphg0b8vPzL7nkkt122y3T6QAAAGAXqekFvrCwcOjQoY899tiYMWNWrFjRrl27bt26nXbaaVve2Q4AAABqsZpe4COiefPmF110UaZTAAAAQCbV6M/AAwAAABUUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABFDgAQAAIAEUeAAAAEgABR4AAAASQIEHAACABMjJdIBdJDs7O9MRgO3Lyakr/yhBTePog0ypxqOvtLoWhlojcW9/CYu705o0aZJKpTKdAtiOpk2bZjoC1FGOPsiU6jv6yuZX08JQeyTu7a+uFPhVq1aVl5dnOgWwHStWrMh0BKijHH2QKdV39DWqpnWhFqkJb39NmjSp/OS6UuBLSkoUeKj5SkpKMh0B6ihHH2SKow8yKHEHoJvYAQAAQAIo8AAAAJAA1VXgS0vd9RIAAACqTJUV+JkzZ1511VWHH354q1atsrOzc3NzI6KsrOyqq66aOnVqVe0FAAAA6qaqKfA33nhj7969r7/++tdee23x4sVlZWUV4+Xl5ddff3337t2vuuqqKtkRAAAA1E1VUOBvuOGGK6+8ct26dRHRvXv3wYMHb7q1UaNGFTX+hz/8Yfr7AgAAgLop3QI/YcKEirPrPXv2fPXVVydNmvTMM89s3JqdnT1t2rRBgwZFxF133fXJJ5+kuTsAAACom9It8Lfffnt5eXmTJk3+8Y9/HH744VtOaNmy5eOPP96rV6+ysrLbbrstzd0BAABA3ZRugR89enRE/M///E+nTp2+bE5eXt73vve9iBg7dmyauwMAAIC6Kd0CP3369IjYb7/9tj2tR48eETFp0qQ0dwcAAAB1U7oFPi8vLyJWrFix7WmzZs2KiFQqlebuAAAAoG5Kt8B37949Il599dVtT3v77bcjYhuX2QMAAADbkG6BHzJkSEQ8+uijzz777JfNef3114cNGxYRxx57bJq7AwAAgLop3QL//e9/v7CwMCKGDBly2WWXzZ07d9Ot5eXlzzzzzEknnVRSUlJYWHj55ZenuTsAAACom9It8A0aNHj22WebNWtWWlp66623FhYWdujQoWLTQQcd1LZt22984xtLly5NpVIPPfRQs2bN0g4MAAAAdVG6BT4i9tlnnwkTJlx66aUVN7SbPXt2xfhbb721YMGCiOjfv//o0aOPOOKI9PcFAAAAdVNOlazSunXrO++888c//vGLL744efLkKVOmLFiwoHPnzj179txvv/0GDx7s/vMAAACQjqop8BU6d+588cUXV+GCAAAAQIUquIQeAAAAqG47dgb+6quvTnN/1157bZorAAAAQB20YwX+uuuuS3N/CjwAAADshB0r8C1bttzq+MqVK9evX7/pSP369deuXbvxj717995rr712Ih8AAAAQO/oZ+EVbc++992ZlZUVEnz597rvvvokTJ65bt27NmjULFy586aWXKp4eN23atCFDhgwbNqxavgkAAACo7dK9id3EiRPPPPPMoqKiSy+9dNy4ceeff36PHj0KCgoiolWrVkceeeTIkSNvvPHG4uLis84665NPPqmKzAAAAFDnpFvgb7311qKiooMPPvi3v/3tlz3s/ac//enAgQPXrVt3yy23pLk7AAAAqJvSLfAvv/xyRJxwwgkVV9F/meOOOy4iRo4cmebuAAAAoG5Kt8DPnz8/Itq2bbvtaa1bt46IhQsXprk7AAAAqJvSLfCNGzeOiHfffXfb0955552IaN68eZq7AwAAgLop3QK/3377RcQjjzwyZcqUL5szderUv/71rxsnAwAAADsq3QJ/8cUXR8SyZcsGDRpUcZp9M+++++6gQYOWLl0aEeeee26auwMAAIC6KSfN1w8aNOjHP/7x7bffPmHChAMPPHDgwIEHHnhgly5dUqnU1KlT33777Y03rhs8ePBJJ52UdmAAAACoi9It8BFx8803r1y58sEHHywrKxs5cuSWt5rPzs4+++yz77rrrvT3BQAAAHVTupfQR0ROTs4f//jHsWPHDhkypE2bNhvHU6nU7rvvfsYZZ4wfP/6Pf/xjQUFB+vsCAACAuqkKzsBX6Nu37+OPPx4Rq1atmjJlSn5+fpcuXZR2AAAAqBJVVuA3atSo0T777LPZ4KpVq84666yOHTv+9re/rfI9AgAAQK1XBZfQV8aoUaOefvrp++67b9fsDgAAAGqZKjgDv2HDhjvvvPO1116bNm3al02YOHFiROTn56e/OwAAAKiD0i3wZWVlgwYNevHFFysz+dRTT01zdwAAAFA3pVvgn3nmmYr23qlTp8MOO2zRokXPP/98RJx77rl5eXmlpaVjxoz58MMPGzZs+OCDDw4ZMqQKIgMAAEDdk26Bv//++yOiR48e7733XuPGjSNiyJAhTz755KmnnnrUUUdFRHl5+aWXXnr33XePGTPmW9/6VvqJAQAAoA5K9yZ2U6ZMiYjzzz+/or1HxNFHHx0Ro0aNqvhjKpW69dZbu3Tpcuutt44bNy7N3QEAAEDdlG6BnzNnTkR0795940jv3r0jYtKkSRtHCgoKfvjDH1bc6y7N3QEAAEDdlG6Bb9CgwWYjnTt3jojJkydvOtivX7+IGDlyZJq7AwAAgLop3QLfq1eviJg6derGkd13372goODjjz9ev379xsHmzZtHxGeffZbm7gAAAKBuqpoC/4c//GHVqlWfr5iV1bNnz/Xr17/88ssbp40fPz4iWrdunebuAAAAoG5Kt8CffPLJETFp0qT+/fsPHTq0YvDggw+OiJ/97GcLFy6MiAULFtxwww0R0bNnzzR3BwAAAHVTugV+4MCBp59+ekRMmDDh5ptvrhi86KKLsrOzP/74406dOu2xxx6dOnWqOAN/ySWXpLk7AAAAqJvSLfAR8fDDD990000dO3ZMpVIVI3379r3++usjYt26dePHjy8qKoqI8847b/DgwenvDgAAAOqgnPSXyM3NveKKK6644ori4uKNg1dcccX+++//8MMPz5kzp1u3bscff/yJJ56Y/r4AAACgbqqCAr9Rfn7+pn884ogjjjjiiCpcHwAAAOqstAr8woULn3rqqYgYPHhw27ZtqygSAAAAsLm0CnyLFi0uueSS0tLSli1bDhkypKoyAQAAAJtJ6yZ22dnZffr0iYgpU6ZUUR4AAABgK9K9C/0vfvGLiBg6dOjKlSurIg8AAACwFekW+CFDhgwdOnT+/PknnXTSJ598UiWZAAAAgM2kexf6ESNGdO/e/ec///kNN9zQr1+/AQMGdOnSpX379gUFBVud//Of/zzNPQIAAEAdlG6BP+aYYzb94xtvvPHGG29sY74CDwAAADsh3QKfk1OVT5IHAAAAtird+l1SUlIlOQAAAIBtSPcmdgAAAMAuoMADAABAAqR7Cf2CBQsqMy0vL69+/fr5+flp7g4AAADqpnQLfJs2bSo/uV69el27dt13332HDBkyaNCgVCqV5t4BAACgjtill9CvW7du3Lhxf/rTn0488cT+/ftPnz59V+4dAAAAkivdM/ATJkyYPn36N7/5zaKiolQqdcQRR/Tt27ewsDAnJ2f27NmffvrpiBEjysrKDjjggDPOOGPRokULFix44YUX5s6dO2bMmGOOOWbs2LGuqwcAAIDtSrfAt2vX7uSTTy4qKjryyCPvvvvu7t27bzZh2rRpF1988YgRI/r373/nnXdGxIYNG/785z+fd955kyZNevDBBy+88MI0MwAAAECtl+4l9Ndee+3H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qINSfYjdwoULQwjnn39+st5DCMcff3wIYdq0ack/ZmRk3HbbbV26dLntttvmzJmT4ukAAACgbko14JcvXx5C6N69e+lIbm5uCGHBggWlIw0bNrz88suTz7pL8XQAAABQN6Ua8I0bNy430rlz5xDCV199VXawd+/eIYQpU6akeDoAAACom1IN+L322iuEsGjRotKRPfbYo2HDhrNnzy4qKiodbNmyZQjh22+/TfF0AAAAUDdVTcD/5S9/2bhx4/8eMTOzZ8+eRUVFb7/9duluc+fODSG0adMmxdMBAABA3ZRqwJ922mkhhAULFvTr1++ee+5JDv7iF78IIYwaNWr16tUhhFWrVt14440hhJ49e6Z4OgAAAKibUg34Y4899swzzwwhfPnll7fcckty8OKLL87Kypo9e3anTp169erVqVOn5BX4Sy+9NMXTAQAAQN2UasCHECZOnDh27Ng999wzIyMjObLPPvvccMMNIYQtW7bMnTu3oKAghDB8+PBBgwalfjoAAACog+qlfoj69euPHDly5MiRhYWFpYMjR47s27fvxIkTly9f3q1bt1/+8pcnn3xy6ucCAACAuqkKAr5UdnZ22T/279+/f//+VXh8AAAAqLOq4C30O7Rt27addGQAAACog6os4JctWzZ69Oijjz561113zcrKql+/fgihpKRk9OjRZT8lHgAAAPgZqibgb7rpptzc3BtuuOH9999fu3ZtSUlJcjyRSNxwww3du3cfPXp0lZwIAAAA6qYqCPgbb7zxmmuu2bJlSwihe/fu5R41n5OTk8z4yy+/PPVzAQAAQN2UasB/+eWXyavrPXv2fPfddxcsWPDSSy+Vbs3Kylq8ePHAgQNDCPfee+8//vGPFE8HAAAAdVOqAX/nnXcmEolmzZq98cYbRx999PY7tG7d+rnnnttrr71KSkpuv/32FE8HAAAAdVOqAT99+vQQwm9+85tOnTr92D4NGjS48MILQwhffPFFiqcDAACAuinVgF+yZEkI4cADD6x4tx49eoQQFixYkOLpAAAAoG5KNeAbNGgQQsjLy6t4t6+//jqEkJGRkeLpAAAAoG5KNeC7d+8eQnj33Xcr3m3GjBkhhAreZg8AAABUINWAHzJkSAjhmWeeefnll39snw8++ODpp58OIQwYMCDF0wEAAEDdlGrA//a3v23fvn0IYciQIX/4wx9W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SronCAAAANWkRgf8woULQwhHHXVUVlZW2fFDDz20dCsAAADUBTU64Ldt29a6dev27duXG69fv34IIXljPAAAANQFNfoe+NGjR+9w/OOPPw4hdO3adftNxcXFmzZt2uF3ZWRkVOHcgJ3BOoV0sfogXaw+SKPoFmCNDvgdmjVr1vPPPx9CGDx48PZbv/jiiwsuuGD78XfeeadZs2Y7fXJAalq1apXuKUAdZfVBuuy81Vfy3U46MNQe0b38xRTwhYWFkyZN+utf/1pSUnLWWWf17t073TMCAACAahJNwE+bNu3hhx9eu3Ztw4YNhw8ffvzxx+9wt5ycnH79+m0/nkgktm7dupPnCKTKOoV0sfogXXbe6sv66V2grqsJL3/JR7xVUgQBv2HDhgceeGDatGkhhF/84hfnnHNOmzZtfmznbt263X///duPf//993l5eTtxlkBVsE4hXaw+SJedt/pa7qTjQi1SE17+WrduXfmda3rAr169euTIkd9//33Hjh0vvfTSvfbaK90zAgAAgDSo0QG/efPm66677vvvvz/22GMvvvjif+qtBQAAAFCb1OiAnzJlyooVK/r27XvZZZeley4AAACQTjU64N96660QwimnnFJSUrLDHTIzM6t3RgAAAJAeNTfgi4uLly9fHkIYPXr0DnfYfffdH3rooeqdFAAAAKRHzb2CvWbNmh+78A4AAAB1Tc29At+2bduXX3453bMAAACAGqHmXoEHAAAASgl4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIQL10T6CaZGb6VQVEICsrK91TgDrK6oN02Ymrb9vOOjDUGtG9/NWVgG/evHlGRka6ZwH8hBYtWqR7ClBHWX2QLjtv9ZV8t5MODLVHdC9/dSXg8/Pz0z0F4Kdt3Lgx3VOAOsrqg3TZeauv8U46LtQiNeHlLycnp/I715WALyoqSiQS6Z4F8BMKCwvTPQWoo6w+SJedt/oEPPykmvDy908FvDvDAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIlAv3RP4aQUFBU888cSMGTM2bNjQtWvX/fbbb+jQoVlZWemeFwAAAFSfmh7wa9euHTNmzJIlS0IIzZo1mzt37ty5c2fNmjVq1KicnJx0zw4AAACqSU1/C/2dd965ZMmSffbZZ8KECY8//viDDz7YoUOHOXPmPPzww+meGgAAAFSfGh3wX3755ezZs5s0aXLNNde0bt06hLDHHntce+21WVlZ77333po1a9I9QQAAAKgmNTrgp0+fHkLo27dv2XfL77bbbrm5uYlEYsaMGembGgAAAFSrGh3wixYtCiEccMAB5caTI8mtAAAAUBfU6IBfuXJlCCH55vmykiMrVqxIw5wAAAAgHWr0U+g3bdoUQtj+afNNmjQJIWzevHn7b1m5cuXzzz+//fhZZ521yy677IQ5AlWpcePG6Z4C1FFWH6TLTlx9eTvrwFBrRPfyV6MDfuvWrSGERo0alRtPpnhhYeH237Jq1aqJEyduP/5v//Zv2x8HqGmsU0gXqw/SZeetvhIBDz8lupe/Gh3wOTk5P/zww5YtW8qNJ6+9x/g58G+X/He6pwB11GcP/D7dU4A66n9OuDHdU4A6KrPtgnRPAahiNTrgW7Zs+cMPP+Tn55cbT460aNFi+2/p1q3b/fffv/14cXFxXp5fQvJ/srOzGzZsGELYsmVLUVFRuqcDdUi9evWSb1crLCwsKChI93SgDsnMzExe/9i2bVvyRkWg2jRt2jQjIyORSGzYsCHdc6FmadasWeV3rtEB37x58xDCunXryo2vX78+hNCqVavtvyUnJ6dfv37bj3///ffJN+RDUr16//t//uLiYv/fgOqUkZGR/KKkpMTqg+qUmfm/Ty9OJBJWH6SF1UeKavRT6Dt27BhC+Pzzz8uNz5o1K4TQuXPnNMwJAAAA0qFGB3zyWvrMmTPLPq9uw4YNs2fPbtCgwZFHHpm+qQEAAEC1qtEB36tXr549e65fv37cuHHFxcUhhMLCwrFjx27duvWII46I7on/AAAA8LPV6HvgQwhXXHHFVVddNXXq1E8//bRjx46LFy8uKiraY489zj333HRPDQAAAKpPjb4CH0LYfffd77777uOOO65Ro0YLFy5s3rz5Kaeccscdd8T4GXIAAADws9X0K/AhhJYtW1566aXpngUAAACkU02/Ag8AAAAEAQ8AAABREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEIGMRCKR7jlUh/Xr15eUlKR7FtQgmZmZmZmZIYTi4uI6sgqghsjIyMjKygohlJSU+JsZqlm9evVCCIlEori4ON1zgbolufpCCNu2bUvvTKhpWrVqVfmd60rAQzlPPPHEXXfdFUL44x//OHjw4HRPB+qQjz76aMSIESGEM88888orr0z3dKAOWb169YknnhhC6Nev3/3335/u6UDdcvTRR2/cuLFVq1ZvvvlmuudCxLyFHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAI+Ro466ttvv/3mm29CCJ06dWrTpk26pwN1SF5e3vz580MIu+2225577pnu6UAdUlRU9Pnnn4cQmjZtutdee6V7OlC3fPrpp8XFxfXq1TvggAPSPRciJuABAAAgAt5CDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQgXrpngCkpKCg4IknnpgxY8aGDRu6du263377DR06NCsr6589zrvvvvvggw+OGzeubdu2229dsWLFpEmTFi1atHr16rZt2/bs2fOMM85o3bp1VfwEEJmKF8uyZcuef/75RYsWrVq1qlWrVgcffPDpp5/euHHjSh78s88+mzx58vLly/Py8krXWqtWrcrtVlULH6JQyXVRquJFWhlLly698sor99577zFjxpQdnzRp0pNPPrnDb3nggQfatWv3804HtcCPrZqk9957780331y6dGl2dnbnzp3POOMMHwPBzybgidjatWvHjBmzZMmSEEKzZs3mzp07d+7cWbNmjRo1Kicn55861Ntvv11QULDDTdOnT7/11luTH/vRvHnz5cuXL1u27IMPPvjTn/60zz77VMGPAVGpYLG8/vrr48eP37ZtW4MGDZo3b/7tt9++8MIL06ZNu/nmmyuIjVKPPvroX//61xBCvXr1Wrdu/c033yxduvT9998fM2ZM2X/oVOHCh5qvkuuirAoWaWUUFRXdfvvtW7du3X7Td99997MPC7VYBaumuLj4lltu+eijj0IIOTk5W7Zs+eyzz/7+979fdtll/fv3r/aZUhsIeCJ25513LlmyZJ999rnyyitbt269cuXKG264Yc6cOQ8//PDvfve7Sh5k8+bNzzzzzNy5c3e4df369ePGjSsuLj7zzDOHDh1av379goKCCRMmvPHGG7fffvsDDzyQnZ1ddT8Q1GgVL5alS5f+5S9/CSH85je/GTBgQGZm5rp168aNG/fZZ5898MADo0ePrvjgCxYseOGFF7Kysi699NIjjjiifv36mzZtuu+++/72t7/deeed999/f+kF9ipZ+BCFyq+LpIoXaSVNnDhx2bJlO9yUDPjbb7+9Q4cO5TZ5NaQuq2DVPPPMMx999FGbNm2uvvrqrl27hhBeeeWV8ePHP/jgg3369PF2Tn4G98ATqy+//HL27NlNmjS55pprkn/97bHHHtdee21WVtZ77723Zs2anzzClClTrrrqqrPPPvvFF1/8sX1mzZq1efPmvfba68wzz6xfv34IoWHDhhdddFGbNm3Wrl27cOHCKvyJoMaqzGJ57LHHiouLBw8e/Mtf/jIzMzOE0LJly2uuuWa33Xb75JNPVq9eXfEp3n777UQiccYZZ/Tv3z+51ho3bnzZZZftsssu33777fLly5O7pb7wISKVXBehcou0Mj777LNXXnmlWbNmO9yaDPgOHTo03E5GRkYq54V4VbBqCgsLX3311aysrOuvv75bt24ZGRkZGRkDBw487LDDCgsLp0+fXv2zpRYQ8MQq+bde3759y75pdrfddsvNzU0kEjNmzPjJIyxdunTlypXZ2dlNmzb9sX95rFixIoRQ7lJDZmZm+/btQwhl//EEtVhlFstXX30VQij3hsAGDRr0798/kUi88cYbFZ/i66+/DiH06dOn7GDDhg3LrbXUFz5EpJLrIlRukf6kDRs23H333c2bN//Vr361/daioqJ169Y1b968YcOGP+/4UPtUvGref//9/Pz8gw46qNwDKS644IKbb775wAMPrK5pUqt4Cz2xWrRoUQjhgAMOKDd+wAEHzJkzJ7m1Yueff/7555+f/PrXv/71hg0btt9nt912CyEsWLAgkUiU/pOoqKgoef/tz34+EMTlJxfLpk2b8vLyQgjbvxswuUySeV+BIUOGFBYWduzYsexgIpH49ttvQwjNmzdPjqS+8CEilVwXoXKvaD/p3nvvXb9+/bXXXltUVLT91lWrViUSCS98UFbFq+bjjz8OIRx88MHlxlu2bNmyZcsfO+azzz7brl27ww47rGqnSq0h4InVypUrw45qITmSvHKeusMPP3zy5MlLliy58847hw0btuuuu65YsWLixInr16/v06fPvvvuWyVngdg1btx4l1122bx58+rVq8u9Y2XVqlWl/1uBfv36lRtJPm9i48aNe+655957750crJ6FDzVEJddFlXjzzTdnzJgxYMCAvn377vCdvcn3zzdv3vz5559///33V61a1bp1686dOw8ZMqRLly5VOBOIxU+umuTbZHbdddelS5dOnTp1wYIFWVlZXbp0Oe644yr4Xdizzz570EEHCXh+jIAnVps2bQohbP/Q6SZNmoQQNm/eXCVnyc7OvuGGG2677bb333///fffLx0/+uijL7nkErf8QamuXbvOnj37rbfeGj58eOlgQUHBW2+9lfyi8oe6+eablyxZsmrVquLi4v3333/EiBGla616Fj7UQBWsi9StXLny4Ycfbteu3Xnnnfdj+yQDfsaMGTNmzKhXr17Tpk2XL1++fPny6dOnn3vuuYMGDaqqyUAUKrNqku+FmT9//qRJkwoLC5ODyXvmL7744qOPPrqa5krt4h54YpX8rI5GjRqVG99ll11CCKV/S6buo48+mjdvXgihRYsW3bt3T5bDZ599NmvWrKo6BdQCv/71rzMyMiZPnvzEE0+sWrVq8+bNX3zxxahRo5IPlispKan8ofLz8/Pz84uLi0MI69evL3tdvdoWPtQ0FayLFBUXFyc/Aev3v/99BQ+TTwZ88hGSzz777KOPPvr000+ffPLJxcXFEyZM8FRX6pRKrprkq9Jjjz3WrVu3sWPHTpo06YEHHjjxxBMLCgruuecej1Li53EFnljl5OT88MMPW7ZsKTeevARXVR8H/cEHH9xzzz05OTnXXntt3759k4Pvvffefffdd9NNN/3nf/5n7969q+REELvc3Nzzzjtv4sSJzz777LPPPpscrFev3sCBAydPnvxPPfVqzJgxIYQtW7a8/vrrEydO/NOf/nTjjTfm5uaG6lr4UANVsC5S9PTTT3/11Vdnnnlmjx49Ktjt2GOPPfDAAzt27Fh6D0vjxo2HDx++fv36Dz/88Nlnn73mmmtSnwxEoZKrJvk2mT333PP6669Pfuhju3btLrrook2bNn3wwQdPPfXUVVddVU0zphYR8MSqZcuWP/zwQ35+frnx5EiLFi2Sfyz3LJ/DDz/8D3/4Q+XP8vjjj4cQLrzwwtJ6DyEcffTR69atmzhx4pNPPjl27Nif/SNALXPyySf36dNnypQpixcvzszM7NGjx9FHH7106dLJkyc3bdo0uU/ll2SjRo1OPfXUNWvWvPrqqy+//HIyVCq58KG22uG6qKQdrr5FixY999xzPXr0OP300yv+9s6dO3fu3Hn78eOPP/7DDz9cvHhx5WcCUav8qmnYsGF+fv6JJ56YrPdSJ5xwwgcffFD6vpXHHnts7dq1pVu3bt26YMGCO+64o3TkoIMOOvzww6vuJyBuAp5YJZ++u27dunLj69evDyG0atUq+cf999+/7G2xXbt2rfwp8vLykh9efdBBB5Xb1K9fv4kTJy5cuLDs0+mBTp06lT4KO+mTTz4JIbRr1y75xx0uyY0bN86ePbtRo0b7779/uQPuu+++r776avLZdaHSCx9qgcqvi0ra4epbuXJlSUnJggULBg8eXG7/WbNmJe9sv+OOO7p16/Zjh01+XMu6deu8IFJHVH7VtGnTJj8/f/vn1bVp0yaEsGbNmuSq+eSTT5YtW1Z2hzVr1pR99FLr1q0FPKUEPLHq2LHjZ5999vnnn5f7Gy15a3rpVYIrr7zyZ5+iUaNGmZmZJSUlyXsOy9q2bVsIYZdddvGPFUhasWLFli1b2rZtm3yeXKnkh+iUPkx7h0tyy5YtY8eObdiw4aRJk8qtqeQNhKUX8Cu58KEWqPy6qKQdrr5GjRrtvvvu5QYLCgrWr1/foEGD5C/F6tevv3nz5nfeeSczM/PEE08sN5nklcOOHTt6QaSOqOSqCSF069Zt8eLFyedHlJV8Oswee+yRXDX33HNP2a1Dhw496KCDRo4cufN+BKIm4IlVv379XnzxxZkzZxYWFpY+PmTDhg2zZ89u0KDBkUcemfopGjRo0KFDh2XLlk2bNu2EE04ouyn5YSEVXJGAuuatt9564YUXBg4ceMEFF5QOLl68eN68eS1atDj00EMr+N5dd921adOmGzZsmDVr1n777Vd2U/ICfmmZV8PChxqi8usiFX379i17j1jS9OnTx44dm5ubm7zxPoSQSCSeffbZvLy8tm3bHnjggWV3fu+990IIPXv2TH0yEIVKrpoQwoABA956660333zz+OOPz8z8v2eHT5kyJYTQvXv36pkwtYyn0BOrXr169ezZc/369ePGjUteIS8sLBw7duzWrVuPOOKIxo0bV8lZhg0bFkKYMGHCu+++m3yM9rZt215++eXnnnsuMzNz6NChVXIWqAWOPPLIzMzM1157berUqSGERCIxf/78P//5zyGEQYMGlbv9r5yMjIzjjz8+hHDvvffOnTs3OVhUVPTUU09NnTq1YcOGJ554YnKwehY+1ASVXxfVM5lf/vKXIYS77rqr9ENYCgoKnnzyybfeeisnJ+fMM8+stslALLp27Zqbm7t48eJbb701+QSKrVu3Pv300++88052drZVw8/jCjwRu+KKK6666qqpU6d++umnHTt2XLx4cVFR0R577HHuuedW1Sl+8YtfLFy48IUXXrjrrrvuv//+Fi1arF27tri4OCsr69xzz917772r6kQQuy5kTVWQAAALpElEQVRduvz6179+7LHHbr311oceeiiRSGzcuDGEcOSRR5566qk/+e1nnHHGP/7xj7lz544aNWqXXXbJyclZs2ZNSUlJdnb2iBEjyt5AWA0LH2qIyq+LanDaaadt2bLlhRde+I//+I+cnJxGjRol7+DNycm54oorks+nAMoZMWLEyJEjp02bNn369NatW69bt664uDg7O/vSSy9NPj8C/lkCnojtvvvud99991NPPfXpp58uXLiwZcuWhx566BlnnJH8ROiqcs455xxyyCEvvvjismXL1qxZ0759+86dO5922mkdOnSowrNALTB06NAuXbo8//zzS5cuLSkp6dWr14ABAyr53J369etff/31r7322gcffLBy5cq8vLwuXbp07dp12LBhpZ9ZlVQ9Cx9qgsqvi2qQ/M11r169XnnllYULF27YsKF79+49evQYNmxYs2bNqnkyEIv27dvfc889kyZNmjlzZl5eXrt27bp163bGGWdU8y/gqE0yEolEuucAAAAA/AT3wAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPADUcu++++5FF1101FFHtW3bNicnZ++99x44cOBLL71UUlKyw/0//vjjYcOG7bHHHo0aNerRo8fVV1+dn58/f/78jIyMjIyMVatWldt/06ZNt9566yGHHNKqVaucnJw+ffpcfPHF8+fP3+HB8/LyxowZc9RRR7Vv375x48b77LPPkCFDpk2bVsU/MwDURhmJRCLdcwAAdoqtW7eeffbZTz/99A63DhgwYPLkyVlZWWUHb7vttpEjR5Zr+969e99yyy0DBgwIIXz33Xe77bZb6abPP/984MCBy5cvL3fwjIyMG264YdSoUWUHp02bNnDgwPXr128/mSuuuOL222//Z344AKhzBDwA1Fo333zz1VdfHULo0aPHBRdc0K1bt0QisWDBggkTJixYsCCEcMcdd/z+978v3f+ll1465ZRTQgjt27c/55xz9ttvv/nz5z/99NNz5sxp2LBhQUFB+P8H/Jo1a3r27JkM8mHDhh1zzDHNmzefOXPmX/7yl7y8vBDCTTfdlJxA8hv79OmzevXqxo0bDx8+/JBDDtlll13+8Y9/3HvvvStWrAghTJ48+aSTTqrO/z4AEBcBDwC1VqdOnZYtW7bXXnv9z//8T05OTun4hg0b+vTps3Tp0kGDBr300kvJwUQise+++86ZMyc3N/ftt99u165dcjw/P3/w4MFTpkxJ/rFswF922WX33HNPvXr1nnvuuZNPPrn0+EuXLj3hhBPmz5/fqFGjefPm7bnnniGECRMmDB8+PITw9ttvH3vssaU7L168ODc3t6io6Nxzz50wYcJO/M8BAJFzDzwA1E6FhYUlJSXt27e/5JJLytZ7CKFp06ZHHXVUCGHx4sWlg88999ycOXNCCLfccktpvYcQmjRpcv/992dkZJQ7/tKlSx966KEQwuWXX1623kMInTp1uv/++0MIW7ZsGT9+fHLw888/DyE0aNCgf//+ZXfu0qXLVVdddc4553Tp0iXFHxkAard66Z4AALBTZGdnf/311z+2dc2aNeVG3nzzzRBChw4dTjzxxHKbunfv3r9//9KL8EmvvfZaUVFRCOF3v/vd9sc/5phjunfv/tVXX5U+oK5t27YhhKKiov/6r/+64IILyu48ZsyYSv5QAFCXuQIPAHVCIpFYsWLF3/72t/Hjxw8dOvTVV18tt8PChQtDCLm5uZmZO/jnwT777FNu5KuvvgohtGvXrn379js849577x1CSF7VDyGcdtppjRs3DiFceOGFBx100A033DBt2rTCwsKUfioAqEtcgQeA2mzu3LkPPvjg1KlTFyxYsGXLlgr2TAb8j9X49uPJ/VesWLH9u+vLWrduXfKL7t27v/jiixdddNGiRYtmzpw5c+bMEEJ2dvbhhx8+ZMiQX/3qV02bNq30jwUAdZEr8ABQa91yyy19+vS59957Z82aVVxcfMABBwwbNuzaa6998803zzvvvHI7J/P+x2q8Xr3yv/Tf/gPhd6ikpGTbtm3Jr4899ti5c+c+//zz55xzTvId9YWFhVOmTLn44otzc3Pfe++9f+qnA4C6RsADQO307rvvjhw5sri4uFevXpMnT96wYcOnn376zDPP/PnPfz7uuOMaNGhQbv9u3bqFELb/RPekb775ptxI586dQwiHHHJI4qeUjf/s7OxTTz31kUce+fbbbxcsWDB+/Pjkx8uvXLny9NNP//7776vwvwAA1DICHgBqp0cffTSE0KhRoylTppx00knZ2dllt5ZeFS/VvXv3EMK8efN2+BGz8+bNKzfSs2fPEMLixYt/7CNpi4uLi4uLS0pKkn9ctmzZsmXLSt9Rnzzj+eef/9prr91zzz0hhLVr13744Yf/xE8IAHWMgAeA2il5Lb1Lly6lH9teKpFIJG9BL6tv374hhK+//vqNN94ot2nJkiVvvfVWucEDDzwwhLBq1aqXX355+7OvXbu2RYsW9erVu/baa5Mjhx12WKdOnc4+++ztdy79WPgffvihEj8ZANRRAh4AaqfkW+IXLVq0evXqsuMFBQUjRoxIfip7cXFx6fg555zTrFmzEMJVV11V9v72zZs3X3LJJWX3TBo0aNBBBx0UQjjvvPM++OCDspuKiorOO++8jRs3ZmRknHvuucnBAw44IIQwZcqU0ufSl5o4cWLyi4MPPvhn/7wAUOtl/Njb3gCAqL344ouDBw8OIeyzzz6jR4/ee++9161b98UXX9x9992LFy9u3Ljxpk2bMjMzX3vttUMPPTQnJyeE8NRTT5111lkhhE6dOg0fPnzfffddsGDBE088MWvWrH/5l3/5+OOPQwjr1q1r0aJF8hQfffTRYYcdlkgk6tevf+aZZx5yyCEdOnT46quvHnrooS+//DKE8Mc//vH6669P7vzKK68MHDgwhJCdnZ38JLldd911xYoVzz///Ouvvx5C+Nd//dc333yz4mfaA0BdJuABoNY6//zzH3744XKDmZmZ//7v/963b9/TTz89OXLKKae88MILya8ff/zxCy+8sKCgoOy3XHrppd27d7/88stDCAUFBWVvp3/nnXfOPvvsFStWbH+W3/72t+PGjSs7ePXVV99yyy07/LfHwQcf/MYbbyTfAgAA7FDWn/70p3TPAQDYKQYNGrTffvt9//33W7duLSws7NChw5AhQx599NGzzjorNzd31apVixYtysjIOOaYY5KPgg8h9OnT58QTT/zuu+/WrFmTmZm5//7733zzzSNHjnzllVc+/PDDhg0bXnfddWVP0aVLl3PPPTeRSGzYsKGgoKBBgwa9evU6/vjjH3/88e1vdz/22GMHDRqUn59fr169oqKirKysnj17HnbYYbfffvvNN9/csGHDavrvAgBxcgUeAPhpF1544fjx43v16jV79ux0zwUA6igPsQMAQgjhpZde6t27d+/evVeuXFluU3Fx8WuvvRb+vwfRAQBpIeABgBBC6N2795w5c+bMmfPkk0+W2/TEE08k73IfMmRIOqYGAITgLfQAQKmTTjrp1VdfbdCgwXXXXTdkyJCWLVsuXLjwlVdeGTt2bElJSd++fT/++OPMTL/9B4D0EPAAwP/Ky8s78sgjZ82atf2mHj16vPHGG507d67+WQEASQIeAPg/xcXFjz322JNPPrlw4cJvv/22RYsW++677+DBg88777yynx4HAFQ/AQ8AAAARcBsbAAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAETg/wExcmz+dTj1PQAAAABJRU5ErkJggg==" width="672" /></p>
 </div>
 </div>
 <div id="references-referências" class="section level3">
 <h3>References | Referências</h3>
-</div>
 </div>
 
 
